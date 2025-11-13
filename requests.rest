@@ -1,0 +1,102 @@
+############################
+# LOCALHOST TESTS
+############################
+
+### Local - Root route
+GET http://localhost:8080/
+
+### Local - Professional route
+GET http://localhost:8080/professional
+
+### Local - All contacts
+GET http://localhost:8080/contacts
+
+### Local - One contact (update this ID from your DB)
+GET http://localhost:8080/contacts/PUT_REAL_ID_HERE
+
+### Local - Create new contact
+POST http://localhost:8080/contacts
+Content-Type: application/json
+
+{
+  "firstName": "Local",
+  "lastName": "User",
+  "email": "local.user@example.com",
+  "favoriteColor": "Blue",
+  "birthday": "1990-01-01"
+}
+
+### Local - Update contact
+PUT http://localhost:8080/contacts/PUT_REAL_ID_HERE
+Content-Type: application/json
+
+{
+  "firstName": "UpdatedLocal",
+  "lastName": "User",
+  "email": "updated.local@example.com",
+  "favoriteColor": "Green",
+  "birthday": "1991-02-02"
+}
+
+### Local - Delete contact
+DELETE http://localhost:8080/contacts/PUT_REAL_ID_HERE
+
+
+### Local - All temples
+GET http://localhost:8080/temples
+
+### Local - Temple by temple_id
+GET http://localhost:8080/temples/1
+
+
+
+############################
+# RENDER TESTS (DEPLOYED)
+# https://cse-341-contacts-project-cou4.onrender.com
+############################
+
+### Render - Root route
+GET https://cse-341-contacts-project-cou4.onrender.com/
+
+### Render - Professional route
+GET https://cse-341-contacts-project-cou4.onrender.com/professional
+
+### Render - All contacts
+GET https://cse-341-contacts-project-cou4.onrender.com/contacts
+
+### Render - One contact
+GET https://cse-341-contacts-project-cou4.onrender.com/contacts/69117a0f3011dab464102c9a
+
+### Render - Create new contact
+POST https://cse-341-contacts-project-cou4.onrender.com/contacts
+Content-Type: application/json
+
+{
+  "firstName": "Render",
+  "lastName": "User",
+  "email": "render.user@example.com",
+  "favoriteColor": "Navy",
+  "birthday": "1998-05-20"
+}
+
+### Render - Update existing contact
+PUT https://cse-341-contacts-project-cou4.onrender.com/contacts/PUT_REAL_ID_HERE
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@updatedexample.com",
+  "favoriteColor": "Blue",
+  "birthday": "1990-03-15"
+}
+
+### Render - Delete contact
+DELETE https://cse-341-contacts-project-cou4.onrender.com/contacts/PUT_REAL_ID_HERE
+
+
+### Render - All temples
+GET https://cse-341-contacts-project-cou4.onrender.com/temples
+
+### Render - Temple by temple_id
+GET https://cse-341-contacts-project-cou4.onrender.com/temples/1
