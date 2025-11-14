@@ -1,102 +1,89 @@
 ############################
-# LOCALHOST TESTS
+# LOCALHOST TESTS - SHOPPING
 ############################
 
 ### Local - Root route
 GET http://localhost:8080/
 
-### Local - Professional route
-GET http://localhost:8080/professional
+############################
+# USERS
+############################
 
-### Local - All contacts
-GET http://localhost:8080/contacts
+### Local - All users
+GET http://localhost:8080/users
 
-### Local - One contact (update this ID from your DB)
-GET http://localhost:8080/contacts/PUT_REAL_ID_HERE
+### Local - One user (update this ID from your DB)
+GET http://localhost:8080/users/PUT_REAL_USER_ID_HERE
 
-### Local - Create new contact
-POST http://localhost:8080/contacts
+### Local - Create new user
+POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-  "firstName": "Local",
-  "lastName": "User",
-  "email": "local.user@example.com",
-  "favoriteColor": "Blue",
-  "birthday": "1990-01-01"
+  "email": "alice@example.com",
+  "firstName": "Alice",
+  "lastName": "Anderson"
 }
 
-### Local - Update contact
-PUT http://localhost:8080/contacts/PUT_REAL_ID_HERE
+### Local - Update user
+PUT http://localhost:8080/users/PUT_REAL_USER_ID_HERE
 Content-Type: application/json
 
 {
-  "firstName": "UpdatedLocal",
-  "lastName": "User",
-  "email": "updated.local@example.com",
-  "favoriteColor": "Green",
-  "birthday": "1991-02-02"
+  "email": "alice.updated@example.com",
+  "firstName": "AliceUpdated",
+  "lastName": "AndersonUpdated"
 }
 
-### Local - Delete contact
-DELETE http://localhost:8080/contacts/PUT_REAL_ID_HERE
-
-
-### Local - All temples
-GET http://localhost:8080/temples
-
-### Local - Temple by temple_id
-GET http://localhost:8080/temples/1
-
+### Local - Delete user
+DELETE http://localhost:8080/users/PUT_REAL_USER_ID_HERE
 
 
 ############################
-# RENDER TESTS (DEPLOYED)
-# https://cse-341-contacts-project-cou4.onrender.com
+# PRODUCTS
 ############################
 
-### Render - Root route
-GET https://cse-341-contacts-project-cou4.onrender.com/
+### Local - All products
+GET http://localhost:8080/products
 
-### Render - Professional route
-GET https://cse-341-contacts-project-cou4.onrender.com/professional
+### Local - One product (update this ID from your DB)
+GET http://localhost:8080/products/PUT_REAL_PRODUCT_ID_HERE
 
-### Render - All contacts
-GET https://cse-341-contacts-project-cou4.onrender.com/contacts
-
-### Render - One contact
-GET https://cse-341-contacts-project-cou4.onrender.com/contacts/69117a0f3011dab464102c9a
-
-### Render - Create new contact
-POST https://cse-341-contacts-project-cou4.onrender.com/contacts
+### Local - Create new product
+POST http://localhost:8080/products
 Content-Type: application/json
 
 {
-  "firstName": "Render",
-  "lastName": "User",
-  "email": "render.user@example.com",
-  "favoriteColor": "Navy",
-  "birthday": "1998-05-20"
+  "name": "Sample Widget",
+  "sku": "WID-1001",
+  "description": "A very fine sample widget.",
+  "category": "Widgets",
+  "brand": "WidgetCo",
+  "price": 19.99,
+  "quantityInStock": 25,
+  "countryOfOrigin": "USA",
+  "color": "Blue",
+  "weight": 1.2,
+  "size": "Medium"
 }
 
-### Render - Update existing contact
-PUT https://cse-341-contacts-project-cou4.onrender.com/contacts/PUT_REAL_ID_HERE
+### Local - Update product
+PUT http://localhost:8080/products/PUT_REAL_PRODUCT_ID_HERE
 Content-Type: application/json
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john.doe@updatedexample.com",
-  "favoriteColor": "Blue",
-  "birthday": "1990-03-15"
+  "name": "Sample Widget - Updated",
+  "sku": "WID-1001",
+  "description": "Updated description for the sample widget.",
+  "category": "Widgets",
+  "brand": "WidgetCo",
+  "price": 24.99,
+  "quantityInStock": 40,
+  "countryOfOrigin": "USA",
+  "color": "Red",
+  "weight": 1.3,
+  "size": "Large"
 }
 
-### Render - Delete contact
-DELETE https://cse-341-contacts-project-cou4.onrender.com/contacts/PUT_REAL_ID_HERE
-
-
-### Render - All temples
-GET https://cse-341-contacts-project-cou4.onrender.com/temples
-
-### Render - Temple by temple_id
-GET https://cse-341-contacts-project-cou4.onrender.com/temples/1
+### Local - Delete product
+DELETE http://localhost:8080/products/PUT_REAL_PRODUCT_ID_HERE

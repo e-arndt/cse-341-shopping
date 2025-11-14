@@ -1,0 +1,555 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Shopping API",
+    "description": "Docs for /users and /products",
+    "version": "1.0.0"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "User / customer account endpoints"
+    },
+    {
+      "name": "Products",
+      "description": "Product catalog endpoints"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+
+    "/users/": {
+      "get": {
+        "tags": ["Users"],
+        "description": "Get all users",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UsersArray"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "description": "Create a new user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+
+    "/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "description": "Get a user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "description": "Update a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "firstName": {
+                  "example": "any"
+                },
+                "lastName": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "description": "Delete a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+
+    "/products/": {
+      "get": {
+        "tags": ["Products"],
+        "description": "Get all products",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProductsArray"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Products"],
+        "description": "Create a new product",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateProductRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+
+    "/products/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "description": "Get a product by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Products"],
+        "description": "Update a product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": { "example": "any" },
+                "sku": { "example": "any" },
+                "description": { "example": "any" },
+                "category": { "example": "any" },
+                "brand": { "example": "any" },
+                "price": { "example": "any" },
+                "quantityInStock": { "example": "any" },
+                "countryOfOrigin": { "example": "any" },
+                "color": { "example": "any" },
+                "weight": { "example": "any" },
+                "size": { "example": "any" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Products"],
+        "description": "Delete a product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "671f2a9f3c0f9b3aa9d9b111"
+        },
+        "email": {
+          "type": "string",
+          "example": "alice@example.com"
+        },
+        "firstName": {
+          "type": "string",
+          "example": "Alice"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Anderson"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2025-11-13T01:23:45.678Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2025-11-13T01:23:45.678Z"
+        }
+      }
+    },
+    "UsersArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/User"
+      }
+    },
+    "CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "alice@example.com"
+        },
+        "firstName": {
+          "type": "string",
+          "example": "Alice"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Anderson"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "671f2a9f3c0f9b3aa9d9b222"
+        },
+        "name": {
+          "type": "string",
+          "example": "Sample Widget"
+        },
+        "sku": {
+          "type": "string",
+          "example": "WID-1001"
+        },
+        "description": {
+          "type": "string",
+          "example": "A very fine sample widget."
+        },
+        "category": {
+          "type": "string",
+          "example": "Widgets"
+        },
+        "brand": {
+          "type": "string",
+          "example": "WidgetCo"
+        },
+        "price": {
+          "type": "number",
+          "example": 19.99
+        },
+        "quantityInStock": {
+          "type": "number",
+          "example": 25
+        },
+        "countryOfOrigin": {
+          "type": "string",
+          "example": "USA"
+        },
+        "color": {
+          "type": "string",
+          "example": "Blue"
+        },
+        "weight": {
+          "type": "number",
+          "example": 1.2
+        },
+        "size": {
+          "type": "string",
+          "example": "Medium"
+        }
+      }
+    },
+    "ProductsArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Product"
+      }
+    },
+    "CreateProductRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Sample Widget"
+        },
+        "sku": {
+          "type": "string",
+          "example": "WID-1001"
+        },
+        "description": {
+          "type": "string",
+          "example": "A very fine sample widget."
+        },
+        "category": {
+          "type": "string",
+          "example": "Widgets"
+        },
+        "brand": {
+          "type": "string",
+          "example": "WidgetCo"
+        },
+        "price": {
+          "type": "number",
+          "example": 19.99
+        },
+        "quantityInStock": {
+          "type": "number",
+          "example": 25
+        },
+        "countryOfOrigin": {
+          "type": "string",
+          "example": "USA"
+        },
+        "color": {
+          "type": "string",
+          "example": "Blue"
+        },
+        "weight": {
+          "type": "number",
+          "example": 1.2
+        },
+        "size": {
+          "type": "string",
+          "example": "Medium"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Something went wrong"
+        }
+      }
+    }
+  }
+}

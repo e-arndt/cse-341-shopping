@@ -11,7 +11,7 @@ async function connect() {
 
   try {
     await mongoose.connect(uri);
-    console.log('✅ Mongoose connected to MongoDB');
+    console.log('✅ Mongoose connected to the MongoDB: shopping');
   } catch (err) {
     console.error('❌ Mongoose connection error:', err);
     throw err;

@@ -1,13 +1,13 @@
 // routes/routes.js
 const router = require('express').Router();
 
-const contactsRouter = require('./contacts');
-const templeRouter = require('./temple');
+const usersRouter = require('./users');
+const productsRouter = require('./products');
 
-// contacts + professional
-router.use('/', contactsRouter);
+// /users routes
+router.use('/users', usersRouter);
 
-// temples
-router.use('/temples', templeRouter);
+// /products routes
+router.use('/products', productsRouter);
 
 module.exports = router;

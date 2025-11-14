@@ -6,60 +6,76 @@ const outputFile = path.join(__dirname, 'swagger.json');
 const endpointsFiles = [
   path.join(__dirname, 'server.js'),
   path.join(__dirname, 'routes', 'routes.js'),
-  path.join(__dirname, 'routes', 'contacts.js'),
+  path.join(__dirname, 'routes', 'users.js'),
+  path.join(__dirname, 'routes', 'products.js'),
 ];
 
 const doc = {
   swagger: '2.0',
   info: {
-    title: 'Contacts / Temple API',
-    description: 'Docs for /contacts and /temples',
+    title: 'Shopping API',
+    description: 'Docs for /users and /products',
     version: '1.0.0'
   },
   basePath: '/',
   consumes: ['application/json'],
   produces: ['application/json'],
   tags: [
-    { name: 'Contacts', description: 'Endpoints for contact-related data' }
+    { name: 'Users', description: 'User / customer account endpoints' },
+    { name: 'Products', description: 'Product catalog endpoints' }
   ],
 
   definitions: {
-    Contact: {
+    // ---------- USERS ----------
+    User: {
       _id: '671f2a9f3c0f9b3aa9d9b111',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      favoriteColor: 'Blue',
-      birthday: '1990-01-01'
+      email: 'alice@example.com',
+      firstName: 'Alice',
+      lastName: 'Anderson',
+      createdAt: '2025-11-13T01:23:45.678Z',
+      updatedAt: '2025-11-13T01:23:45.678Z'
     },
-    ContactsArray: [{ $ref: '#/definitions/Contact' }],
-    CreateContactRequest: {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      favoriteColor: 'Blue',
-      birthday: '1990-01-01'
+    UsersArray: [{ $ref: '#/definitions/User' }],
+    CreateUserRequest: {
+      email: 'alice@example.com',
+      firstName: 'Alice',
+      lastName: 'Anderson'
     },
-    CreateContactResponse: { id: '671f2a9f3c0f9b3aa9d9b111' },
-    ValidationError: {
-      message: 'Validation failed',
-      errors: { email: 'Invalid email address' }
-    },
-    DuplicateError: {
-      message: "Duplicate value for unique field 'email': 'john.doe@example.com'",
-      field: 'email',
-      value: 'john.doe@example.com'
-    },
-    InvalidIdError: { message: 'Invalid ID format' },
-    NotFoundError: { message: 'Contact not found' },
 
-    // For /professional
-    Professional: {
-      professionalName: 'Eric Arndt',
-      firstName: 'Eric',
-      lastName: 'Arndt',
-      email: 'eric@example.com'
+    // ---------- PRODUCTS ----------
+    Product: {
+      _id: '671f2a9f3c0f9b3aa9d9b222',
+      name: 'Sample Widget',
+      sku: 'WID-1001',
+      description: 'A very fine sample widget.',
+      category: 'Widgets',
+      brand: 'WidgetCo',
+      price: 19.99,
+      quantityInStock: 25,
+      countryOfOrigin: 'USA',
+      color: 'Blue',
+      weight: 1.2,
+      size: 'Medium'
     },
+    ProductsArray: [{ $ref: '#/definitions/Product' }],
+    CreateProductRequest: {
+      name: 'Sample Widget',
+      sku: 'WID-1001',
+      description: 'A very fine sample widget.',
+      category: 'Widgets',
+      brand: 'WidgetCo',
+      price: 19.99,
+      quantityInStock: 25,
+      countryOfOrigin: 'USA',
+      color: 'Blue',
+      weight: 1.2,
+      size: 'Medium'
+    },
+
+    // Generic error shape if you want it later
+    ErrorResponse: {
+      message: 'Something went wrong'
+    }
   }
 };
 
