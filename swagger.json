@@ -5,9 +5,12 @@
     "description": "Docs for /users and /products",
     "version": "1.0.0"
   },
-  "host": "localhost:8080",
   "basePath": "/",
   "tags": [
+    {
+    "name": "System",
+    "description": "API status and root endpoints"
+    },
     {
       "name": "Users",
       "description": "User / customer account endpoints"
@@ -18,7 +21,7 @@
     }
   ],
   "schemes": [
-    "http"
+    "http", "https"
   ],
   "consumes": [
     "application/json"
@@ -29,6 +32,7 @@
   "paths": {
     "/": {
       "get": {
+        "tags": ["System"],
         "description": "",
         "responses": {
           "200": {
@@ -41,17 +45,8 @@
             "description": ""
           }
         }
-      },
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
       }
     },
-
     "/users/": {
       "get": {
         "tags": ["Users"],
