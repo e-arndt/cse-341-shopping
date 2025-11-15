@@ -48,7 +48,7 @@ async function createUser(req, res) {
       email,
       firstName,
       lastName,
-      // googleId will be set later when we wire up OAuth
+      // googleId will be set later with OAuth
     });
 
     const saved = await user.save();
