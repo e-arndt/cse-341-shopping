@@ -2,20 +2,22 @@
 const router = require('express').Router();
 const validateId = require('../middleware/validateId');
 const products = require('../controllers/products');
+const { requireAuth } = require('../middleware/auth');
 
-// GET /products
+// GET /products (public)
 router.get('/', products.getAllProducts);
 
-// GET /products/:id
+// GET /products/:id (public)
 router.get('/:id', validateId, products.getProductById);
 
-// POST /products
-router.post('/', products.createProduct);
+// POST /products (protected)
+router.post('/', requireAuth, products.createProduct);
 
-// PUT /products/:id
-router.put('/:id', validateId, products.updateProduct);
+// PUT /products/:id (protected)
+router.put('/:id', validateId, requireAuth, products.updateProduct);
 
-// DELETE /products/:id
-router.delete('/:id', validateId, products.deleteProduct);
+// DELETE /products/:id (protected)
+router.delete('/:id', validateId, requireAuth, products.deleteProduct);
 
 module.exports = router;
+
