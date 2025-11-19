@@ -11,13 +11,29 @@ router.get('/', products.getAllProducts);
 router.get('/:id', validateId, products.getProductById);
 
 // POST /products (protected)
-router.post('/', requireAuth, products.createProduct);
+router.post(
+  '/',
+  requireAuth,
+  /* #swagger.security = [{ "BearerAuth": [] }] */
+  products.createProduct
+);
 
 // PUT /products/:id (protected)
-router.put('/:id', validateId, requireAuth, products.updateProduct);
+router.put(
+  '/:id',
+  validateId,
+  requireAuth,
+  /* #swagger.security = [{ "BearerAuth": [] }] */
+  products.updateProduct
+);
 
 // DELETE /products/:id (protected)
-router.delete('/:id', validateId, requireAuth, products.deleteProduct);
+router.delete(
+  '/:id',
+  validateId,
+  requireAuth,
+  /* #swagger.security = [{ "BearerAuth": [] }] */
+  products.deleteProduct
+);
 
 module.exports = router;
-

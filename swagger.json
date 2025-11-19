@@ -2,74 +2,158 @@
   "swagger": "2.0",
   "info": {
     "title": "Shopping API",
-    "description": "Docs for /users and /products",
+    "description": "Docs for /auth, /users and /products",
     "version": "1.0.0"
   },
+  "host": "localhost:8080",
   "basePath": "/",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+
   "tags": [
     {
-    "name": "System",
-    "description": "API status and root endpoints"
+      "name": "Auth",
+      "description": "OAuth login and callback endpoints"
+    },
+    {
+      "name": "System",
+      "description": "API status and root endpoints"
     },
     {
       "name": "Users",
-      "description": "User / customer account endpoints"
+      "description": "User / customer account endpoints (protected)"
     },
     {
       "name": "Products",
       "description": "Product catalog endpoints"
     }
   ],
-  "schemes": [
-    "https", "http"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Paste: Bearer <JWT token> from /auth/google/callback"
+    }
+  },
+
   "paths": {
+    "/auth/google": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Start Google OAuth login",
+        "description": "Redirects the user to Google to sign in. Use this in a normal browser tab, not via 'Try it out' in Swagger.",
+        "responses": {
+          "302": {
+            "description": "Redirect to Google sign-in"
+          }
+        }
+      }
+    },
+
+    "/auth/google/callback": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Google OAuth callback",
+        "description": "Google redirects here after login. Returns a JWT and basic user info.",
+        "responses": {
+          "200": {
+            "description": "Login successful, JWT returned",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string", "example": "Login successful" },
+                "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+                "user": { "$ref": "#/definitions/User" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized or invalid Google callback"
+          }
+        }
+      }
+    },
+
+    "/auth/failure": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "OAuth failure",
+        "description": "Shown if Google login fails or is cancelled.",
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+
     "/": {
       "get": {
         "tags": ["System"],
-        "description": "",
+        "summary": "API root",
+        "description": "Simple health check route that returns 'Server is up'.",
         "responses": {
           "200": {
             "description": "OK"
           },
           "204": {
             "description": "No Content"
-          },
-          "default": {
-            "description": ""
           }
         }
       }
     },
+
     "/users/": {
       "get": {
         "tags": ["Users"],
-        "description": "Get all users",
+        "summary": "Get all users",
+        "description": "Returns a list of all users. Protected – requires Bearer JWT.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": false
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/UsersArray"
-            }
+            "schema": { "$ref": "#/definitions/UsersArray" }
           },
           "204": {
             "description": "No Content"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": ["Users"],
-        "description": "Create a new user",
+        "summary": "Create a new user",
+        "description": "Create a user document. Protected – requires Bearer JWT.",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
           {
             "name": "body",
             "in": "body",
@@ -81,41 +165,7 @@
         "responses": {
           "201": {
             "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-
-    "/users/{id}": {
-      "get": {
-        "tags": ["Users"],
-        "description": "Get a user by ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
+            "schema": { "$ref": "#/definitions/User" }
           },
           "204": {
             "description": "No Content"
@@ -123,17 +173,29 @@
           "400": {
             "description": "Bad Request"
           },
-          "404": {
-            "description": "Not Found"
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
           },
           "500": {
             "description": "Internal Server Error"
           }
-        }
-      },
-      "put": {
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+
+    "/users/{id}": {
+      "get": {
         "tags": ["Users"],
-        "description": "Update a user",
+        "summary": "Get user by ID",
+        "description": "Protected – requires Bearer JWT.",
         "parameters": [
           {
             "name": "id",
@@ -142,21 +204,61 @@
             "type": "string"
           },
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/User" }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update user by ID",
+        "description": "Protected – requires Bearer JWT.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "firstName": {
-                  "example": "any"
-                },
-                "lastName": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/CreateUserRequest"
             }
           }
         ],
@@ -170,6 +272,9 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not Found"
           },
@@ -179,17 +284,29 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": ["Users"],
-        "description": "Delete a user",
+        "summary": "Delete user by ID",
+        "description": "Protected – requires Bearer JWT.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": false
           }
         ],
         "responses": {
@@ -199,26 +316,33 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
 
     "/products/": {
       "get": {
         "tags": ["Products"],
-        "description": "Get all products",
+        "summary": "Get all products",
+        "description": "Public endpoint – no auth required.",
         "responses": {
           "200": {
             "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ProductsArray"
-            }
+            "schema": { "$ref": "#/definitions/ProductsArray" }
           },
           "204": {
             "description": "No Content"
@@ -230,8 +354,15 @@
       },
       "post": {
         "tags": ["Products"],
-        "description": "Create a new product",
+        "summary": "Create a new product",
+        "description": "Protected – requires Bearer JWT.",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
           {
             "name": "body",
             "in": "body",
@@ -243,9 +374,7 @@
         "responses": {
           "201": {
             "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/Product"
-            }
+            "schema": { "$ref": "#/definitions/Product" }
           },
           "204": {
             "description": "No Content"
@@ -253,20 +382,29 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "409": {
             "description": "Conflict"
           },
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
 
     "/products/{id}": {
       "get": {
         "tags": ["Products"],
-        "description": "Get a product by ID",
+        "summary": "Get product by ID",
+        "description": "Public endpoint – no auth required.",
         "parameters": [
           {
             "name": "id",
@@ -278,9 +416,7 @@
         "responses": {
           "200": {
             "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Product"
-            }
+            "schema": { "$ref": "#/definitions/Product" }
           },
           "204": {
             "description": "No Content"
@@ -298,7 +434,8 @@
       },
       "put": {
         "tags": ["Products"],
-        "description": "Update a product",
+        "summary": "Update product by ID",
+        "description": "Protected – requires Bearer JWT.",
         "parameters": [
           {
             "name": "id",
@@ -307,23 +444,16 @@
             "type": "string"
           },
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": false
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": { "example": "any" },
-                "sku": { "example": "any" },
-                "description": { "example": "any" },
-                "category": { "example": "any" },
-                "brand": { "example": "any" },
-                "price": { "example": "any" },
-                "quantityInStock": { "example": "any" },
-                "countryOfOrigin": { "example": "any" },
-                "color": { "example": "any" },
-                "weight": { "example": "any" },
-                "size": { "example": "any" }
-              }
+              "$ref": "#/definitions/CreateProductRequest"
             }
           }
         ],
@@ -337,6 +467,9 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not Found"
           },
@@ -346,17 +479,29 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": ["Products"],
-        "description": "Delete a product",
+        "summary": "Delete product by ID",
+        "description": "Protected – requires Bearer JWT.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string",
+            "required": false
           }
         ],
         "responses": {
@@ -366,16 +511,25 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     }
   },
+
   "definitions": {
     "User": {
       "type": "object",
@@ -406,12 +560,12 @@
         }
       }
     },
+
     "UsersArray": {
       "type": "array",
-      "items": {
-        "$ref": "#/definitions/User"
-      }
+      "items": { "$ref": "#/definitions/User" }
     },
+
     "CreateUserRequest": {
       "type": "object",
       "properties": {
@@ -429,6 +583,7 @@
         }
       }
     },
+
     "Product": {
       "type": "object",
       "properties": {
@@ -482,12 +637,12 @@
         }
       }
     },
+
     "ProductsArray": {
       "type": "array",
-      "items": {
-        "$ref": "#/definitions/Product"
-      }
+      "items": { "$ref": "#/definitions/Product" }
     },
+
     "CreateProductRequest": {
       "type": "object",
       "properties": {
@@ -537,6 +692,7 @@
         }
       }
     },
+
     "ErrorResponse": {
       "type": "object",
       "properties": {

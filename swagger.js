@@ -4,10 +4,7 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const outputFile = path.join(__dirname, 'swagger.json');
 const endpointsFiles = [
-  path.join(__dirname, 'server.js'),
-  path.join(__dirname, 'routes', 'routes.js'),
-  path.join(__dirname, 'routes', 'users.js'),
-  path.join(__dirname, 'routes', 'products.js'),
+  path.join(__dirname, 'server.js')
 ];
 
 const doc = {
@@ -24,6 +21,14 @@ const doc = {
     { name: 'Users', description: 'User / customer account endpoints' },
     { name: 'Products', description: 'Product catalog endpoints' }
   ],
+    securityDefinitions: {
+    BearerAuth: {
+      type: 'apiKey',
+      name: 'Authorization',
+      in: 'header',
+      description: 'Enter: Bearer <JWT token>'
+    }
+  },
 
   definitions: {
     // ---------- USERS ----------
@@ -72,7 +77,7 @@ const doc = {
       size: 'Medium'
     },
 
-    // Generic error shape if you want it later
+    // Generic error
     ErrorResponse: {
       message: 'Something went wrong'
     }

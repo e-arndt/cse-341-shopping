@@ -8,10 +8,18 @@ function requireAuth(req, res, next) {
     return res.status(401).json({ message: 'Missing Authorization header' });
   }
 
-  const [type, token] = header.split(' ');
+  // Allow either "Bearer <token>" OR just "<token>"
+  let token = header;
 
-  if (type !== 'Bearer' || !token) {
-    return res.status(401).json({ message: 'Invalid Authorization header format' });
+  // If it starts with "Bearer " (any case), strip that off
+  if (header.toLowerCase().startsWith('bearer ')) {
+    token = header.slice(7).trim();
+  }
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Invalid Authorization header format (no token)' });
   }
 
   try {
