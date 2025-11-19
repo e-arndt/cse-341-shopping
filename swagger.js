@@ -1,27 +1,42 @@
+// swagger.js
 require('dotenv').config();
 const path = require('path');
 const swaggerAutogen = require('swagger-autogen')();
 
 const outputFile = path.join(__dirname, 'swagger.json');
-const endpointsFiles = [
-  path.join(__dirname, 'server.js')
-];
+const endpointsFiles = [path.join(__dirname, 'server.js')];
 
 const doc = {
   swagger: '2.0',
+
   info: {
     title: 'Shopping API',
-    description: 'Docs for /users and /products',
+    description: 'Docs for /auth, /users and /products',
     version: '1.0.0'
   },
+
+  // Automatically use the right host (Render or local)
+  host: process.env.SWAGGER_HOST || 'localhost:8080',
+
   basePath: '/',
+
+  // Automatically use https on Render, http locally
+  schemes: process.env.SWAGGER_SCHEMES
+    ? process.env.SWAGGER_SCHEMES.split(',')
+    : ['http'],
+
   consumes: ['application/json'],
   produces: ['application/json'],
+
   tags: [
-    { name: 'Users', description: 'User / customer account endpoints' },
-    { name: 'Products', description: 'Product catalog endpoints' }
+    { name: 'Auth',    description: 'OAuth login and callback endpoints' },
+    { name: 'System',  description: 'API status and root endpoints' },
+    { name: 'Users',   description: 'User / customer account endpoints (protected)' },
+    { name: 'Products',description: 'Product catalog endpoints' }
   ],
-    securityDefinitions: {
+
+  // JWT Bearer Authorization definition
+  securityDefinitions: {
     BearerAuth: {
       type: 'apiKey',
       name: 'Authorization',
@@ -30,6 +45,7 @@ const doc = {
     }
   },
 
+  // ----- SCHEMA DEFINITIONS -----
   definitions: {
     // ---------- USERS ----------
     User: {
@@ -83,12 +99,5 @@ const doc = {
     }
   }
 };
-
-if (process.env.SWAGGER_HOST) {
-  doc.host = process.env.SWAGGER_HOST;
-}
-if (process.env.SWAGGER_SCHEMES) {
-  doc.schemes = process.env.SWAGGER_SCHEMES.split(',');
-}
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
