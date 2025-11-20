@@ -15,27 +15,18 @@ const doc = {
     version: '1.0.0'
   },
 
-  // Automatically use the right host (Render or local)
-  host: process.env.SWAGGER_HOST || 'localhost:8080',
-
   basePath: '/',
-
-  // Automatically use https on Render, http locally
-  schemes: process.env.SWAGGER_SCHEMES
-    ? process.env.SWAGGER_SCHEMES.split(',')
-    : ['http'],
 
   consumes: ['application/json'],
   produces: ['application/json'],
 
   tags: [
-    { name: 'Auth',    description: 'OAuth login and callback endpoints' },
-    { name: 'System',  description: 'API status and root endpoints' },
-    { name: 'Users',   description: 'User / customer account endpoints (protected)' },
-    { name: 'Products',description: 'Product catalog endpoints' }
+    { name: 'Auth',     description: 'OAuth login and callback endpoints' },
+    { name: 'System',   description: 'API status and root endpoints' },
+    { name: 'Users',    description: 'User / customer account endpoints (protected)' },
+    { name: 'Products', description: 'Product catalog endpoints' }
   ],
 
-  // JWT Bearer Authorization definition
   securityDefinitions: {
     BearerAuth: {
       type: 'apiKey',
@@ -45,9 +36,8 @@ const doc = {
     }
   },
 
-  // ----- SCHEMA DEFINITIONS -----
   definitions: {
-    // ---------- USERS ----------
+    // USERS
     User: {
       _id: '671f2a9f3c0f9b3aa9d9b111',
       email: 'alice@example.com',
@@ -63,7 +53,7 @@ const doc = {
       lastName: 'Anderson'
     },
 
-    // ---------- PRODUCTS ----------
+    // PRODUCTS
     Product: {
       _id: '671f2a9f3c0f9b3aa9d9b222',
       name: 'Sample Widget',
@@ -93,11 +83,17 @@ const doc = {
       size: 'Medium'
     },
 
-    // Generic error
     ErrorResponse: {
       message: 'Something went wrong'
     }
   }
 };
+
+if (process.env.SWAGGER_HOST) {
+  doc.host = process.env.SWAGGER_HOST;
+}
+if (process.env.SWAGGER_SCHEMES) {
+  doc.schemes = process.env.SWAGGER_SCHEMES.split(',');
+}
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
