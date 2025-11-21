@@ -4,7 +4,12 @@ const path = require('path');
 const swaggerAutogen = require('swagger-autogen')();
 
 const outputFile = path.join(__dirname, 'swagger.json');
-const endpointsFiles = [path.join(__dirname, 'server.js')];
+
+// IMPORTANT: scan ALL route files
+const endpointsFiles = [
+  path.join(__dirname, 'routes/users.js'),
+  path.join(__dirname, 'routes/products.js')
+];
 
 const doc = {
   swagger: '2.0',
@@ -21,9 +26,9 @@ const doc = {
   produces: ['application/json'],
 
   tags: [
-    { name: 'Auth',     description: 'OAuth login and callback endpoints' },
-    { name: 'System',   description: 'API status and root endpoints' },
-    { name: 'Users',    description: 'User / customer account endpoints (protected)' },
+    { name: 'Auth', description: 'OAuth login and callback endpoints' },
+    { name: 'System', description: 'API status and root endpoints' },
+    { name: 'Users', description: 'User / customer account endpoints (protected)' },
     { name: 'Products', description: 'Product catalog endpoints' }
   ],
 
@@ -37,7 +42,6 @@ const doc = {
   },
 
   definitions: {
-    // USERS
     User: {
       _id: '671f2a9f3c0f9b3aa9d9b111',
       email: 'alice@example.com',
@@ -53,7 +57,6 @@ const doc = {
       lastName: 'Anderson'
     },
 
-    // PRODUCTS
     Product: {
       _id: '671f2a9f3c0f9b3aa9d9b222',
       name: 'Sample Widget',

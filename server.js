@@ -35,12 +35,20 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 // Step 1: Redirect to Google for login
 app.get(
   '/auth/google',
+  /* 
+    #swagger.tags = ['Auth']
+    #swagger.description = 'Start Google OAuth login.'
+  */
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
 // Step 2: Google redirects back to here
 app.get(
   '/auth/google/callback',
+  /* 
+    #swagger.tags = ['Auth']
+    #swagger.description = 'Google OAuth callback endpoint.'
+  */
   passport.authenticate('google', {
     session: false,
     failureRedirect: '/auth/failure',
@@ -73,14 +81,29 @@ app.get(
   }
 );
 
-app.get('/auth/failure', (req, res) => {
-  res.status(401).json({ message: 'Google authentication failed' });
-});
+app.get(
+  '/auth/failure',
+  /* 
+    #swagger.tags = ['Auth']
+    #swagger.description = 'Handle failed Google OAuth login.'
+  */
+  (req, res) => {
+    res.status(401).json({ message: 'Google authentication failed' });
+  }
+);
 
 // Routes
-app
-  .use('/', routes)
-  .get('/', (req, res) => res.send('Server is up'));
+app.get(
+  '/',
+  /* 
+    #swagger.tags = ['System']
+    #swagger.description = 'API root / health check endpoint.'
+  */
+  (req, res) => res.send('Server is up')
+);
+
+// Routes (users, products, etc.)
+app.use('/', routes);
 
 // Unified error handler (handles Mongoose & general errors)
 app.use((err, req, res, next) => {

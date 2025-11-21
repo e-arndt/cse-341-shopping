@@ -8,7 +8,11 @@ const { requireAuth } = require('../middleware/auth');
 router.get(
   '/',
   requireAuth,
-  /* #swagger.security = [{ "BearerAuth": [] }] */
+  /* 
+    #swagger.tags = ['Users']
+    #swagger.description = 'Get all users (protected).'
+    #swagger.security = [{ "BearerAuth": [] }]
+  */
   users.getAllUsers
 );
 
@@ -17,7 +21,11 @@ router.get(
   '/:id',
   validateId,
   requireAuth,
-  /* #swagger.security = [{ "BearerAuth": [] }] */
+  /* 
+    #swagger.tags = ['Users']
+    #swagger.description = 'Get a single user by ID (protected).'
+    #swagger.security = [{ "BearerAuth": [] }]
+  */
   users.getUserById
 );
 
@@ -25,7 +33,11 @@ router.get(
 router.post(
   '/',
   requireAuth,
-  /* #swagger.security = [{ "BearerAuth": [] }] */
+  /* 
+    #swagger.tags = ['Users']
+    #swagger.description = 'Create a new user (protected).'
+    #swagger.security = [{ "BearerAuth": [] }]
+  */
   users.createUser
 );
 
@@ -34,7 +46,11 @@ router.put(
   '/:id',
   validateId,
   requireAuth,
-  /* #swagger.security = [{ "BearerAuth": [] }] */
+  /* 
+    #swagger.tags = ['Users']
+    #swagger.description = 'Update an existing user by ID (protected).'
+    #swagger.security = [{ "BearerAuth": [] }]
+  */
   users.updateUser
 );
 
@@ -43,7 +59,11 @@ router.delete(
   '/:id',
   validateId,
   requireAuth,
-  /* #swagger.security = [{ "BearerAuth": [] }] */
+  /* 
+    #swagger.tags = ['Users']
+    #swagger.description = 'Delete a user by ID (protected).'
+    #swagger.security = [{ "BearerAuth": [] }]
+  */
   users.deleteUser
 );
 
