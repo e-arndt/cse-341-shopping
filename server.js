@@ -35,9 +35,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 // Step 1: Redirect to Google for login
 app.get(
   '/auth/google',
-  /* 
+   /* 
     #swagger.tags = ['Auth']
-    #swagger.description = 'Start Google OAuth login.'
+    #swagger.description = 'Starts the Google OAuth login flow. 
+    This endpoint redirects the user to Google and cannot be tested 
+    using Swagger "Try it out". Append to URL in browser (https://cse-341-shopping.onrender.com/auth/google).'
   */
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
@@ -47,7 +49,8 @@ app.get(
   '/auth/google/callback',
   /* 
     #swagger.tags = ['Auth']
-    #swagger.description = 'Google OAuth callback endpoint.'
+    #swagger.description = 'OAuth callback endpoint. 
+    Not intended for manual access. Triggered automatically by Google during OAuth flow.'
   */
   passport.authenticate('google', {
     session: false,
@@ -85,7 +88,7 @@ app.get(
   '/auth/failure',
   /* 
     #swagger.tags = ['Auth']
-    #swagger.description = 'Handle failed Google OAuth login.'
+    #swagger.description = 'Displays an error when Google OAuth login fails.'
   */
   (req, res) => {
     res.status(401).json({ message: 'Google authentication failed' });

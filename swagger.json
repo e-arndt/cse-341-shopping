@@ -33,7 +33,7 @@
     "/auth/google": {
       "get": {
         "tags": ["Auth"],
-        "description": "Start Google OAuth authentication.",
+        "description": "Starts the Google OAuth login flow. Redirects the user to Google and cannot be tested using Swagger 'Try it out'. Append to URL in browser (https://cse-341-shopping.onrender.com/auth/google).",
         "responses": {
           "204": { "description": "No Content" }
         }
@@ -43,7 +43,7 @@
     "/auth/google/callback": {
       "get": {
         "tags": ["Auth"],
-        "description": "Google OAuth callback endpoint.",
+        "description": "OAuth callback endpoint. Not meant to be called manually or via Swagger. Google redirects here after login and the server returns a JWT.",
         "responses": {
           "200": { "description": "Successful login." },
           "204": { "description": "No Content" }
@@ -54,7 +54,7 @@
     "/auth/failure": {
       "get": {
         "tags": ["Auth"],
-        "description": "Handle failed OAuth login.",
+        "description": "Handles failed OAuth logins. Returns a 401 response if Google authentication fails.",
         "responses": {
           "204": { "description": "No Content" },
           "401": { "description": "Unauthorized" }
