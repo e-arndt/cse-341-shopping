@@ -15,7 +15,7 @@
     { "name": "Products", "description": "Product catalog endpoints" }
   ],
 
-  "schemes": ["http"],
+  "schemes": ["https"],
 
   "securityDefinitions": {
     "BearerAuth": {
